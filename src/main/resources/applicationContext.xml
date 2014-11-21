@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+	<context:annotation-config />
+	<tx:annotation-driven proxy-target-class="true" />
+
+	<bean id="myDataSource" class="oracle.jdbc.pool.OracleDataSource">
+		<property name="URL" value="jdbc:oracle:thin:@172.26.50.86:1531:TTIBBW01" />
+		<property name="user" value="bwserv" />
+		<property name="password" value="bwserv" />
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+
+
+	<!-- <bean id="mySessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"> -->
+	<bean id="mySessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="myDataSource" />
+		<property name="packagesToScan" value="com.lalongooo.spring_hibernate.entity" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="myEntitySpringDaoImpl"
+		class="com.lalongooo.spring_hibernate.dao.impl.EntitySpringDaoImpl">
+		<property name="sessionFactory" ref="mySessionFactory" />
+	</bean>
+
+</beans>
+          
