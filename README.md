@@ -1,0 +1,1 @@
+**Repo created for my own learning exercises with Spring Framework and Hibernate**
